@@ -31,8 +31,43 @@ router.get("/", (req, res) => {
         });
 });
 
-router.get("/post", (req, res) => {
-    res.render("post");
+router.get("/post/:id", (req, res) => {
+
+    let id = req.params.id;
+
+    if (isNaN(id)){
+        res.redirect("/");
+    } else {
+
+        var url = "https://jsonplaceholder.typicode.com/posts/" + id;
+
+    axios.get(url)
+        .then(function (response) {
+            var post = response.data;
+            url = "https://jsonplaceholder.typicode.com/posts/";
+            axios.get(url)
+                .then(function (response) {
+
+                    var posts = response.data;
+                    posts = posts.slice(0, 4);
+                    
+                    res.render("post", {
+                        post: post,
+                        posts: posts,
+                    })
+                })
+                .catch(function (error) {
+                    console.log(`Erro ao consumir Api ${url} \n ${error}`);
+                });
+        })
+        .catch(function (error) {
+            console.log(`Erro ao consumir Api ${url} \n ${error}`);
+        });
+    }
+});
+
+router.get("*", (req, res) => {
+    res.status(404).render("404");
 });
 
 module.exports = router;

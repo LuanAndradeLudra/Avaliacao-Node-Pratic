@@ -1,36 +1,68 @@
 <%- include("./partials/header") %>
-
+    <% capitalize=function(string){ %>
+        <% return string.charAt(0).toUpperCase() + string.slice(1); %>
+    <% } %>
+    <% reduce = function(string){ %>
+        <% if(string.length >= 40){ %>
+        <% return `${string.substring(0, 40)}...`; %>
+        <% } else { %>
+        <% return string %>
+        <% } %>
+    <% } %>
     <div class="container">
-        <div class="row">
-            <div class="col-md-12 blog-main my-4">
-                <h3 class="pb-3 mb-4 font-italic border-bottom">
-                    From the Firehose
-                </h3>
-
+            <div class="col-md-12 blog-main my-4 postDiv">
                 <div class="blog-post">
-                    <h2 class="blog-post-title">Sample blog post</h2>
-                    <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
-
-                    <p>This blog post shows a few different types of content that's supported and styled with Bootstrap.
-                        Basic typography, images, and code are all supported.</p>
+                    <h2 class="blog-post-title"><%- capitalize(post.title) %></h2>
                     <hr>
-                    <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus
-                        mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere
-                        consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
-                    <blockquote>
-                        <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong>
-                            ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    </blockquote>
-                    <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
-                        fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+                    <p><%= post.body %></p>
                 </div><!-- /.blog-post -->
 
                 <nav class="blog-pagination">
-                    <a class="btn btn-outline-primary" href="#">Older</a>
-                    <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
+                    <a class="btn btn-primary" href="#" onclick="showRecentsPosts()">Ver posts mais recentes</a>
                 </nav>
-
             </div><!-- /.blog-main -->
-        </div>
-    </div>
+            <% posts.forEach((post)=> { %>
+                <div class="col-md-12 my-2 postsDiv" style="display: none;">
+                    <div class="card flex-md-row mb-4 box-shadow h-md-250">
+                        <div class="card-body d-flex flex-column align-items-start">
+                            <h3 class="mb-2">
+                                <%- capitalize(post.title) %>
+                            </h3>
+                            <p class="card-text mb-2"><%- reduce(post.body)%></p>
+                            <a href="/post/<%=post.id%>">Saiba mais</a>
+                        </div>
+                    </div>
+                    <% }) %>
+                    <nav class="blog-pagination">
+                        <a class="btn btn-primary" href="#" onclick="showOpennedPost()">Voltar ao post</a>
+                    </nav>
+            </div>
+    
+    <script>
+        function showRecentsPosts(){
+            var postDiv = document.querySelectorAll('.postDiv');
+            postDiv.forEach(element => {
+                element.style.display = 'none'
+            });
+
+            var postsDiv = document.querySelectorAll('.postsDiv');
+            postsDiv.forEach(element => {
+                element.style.display = 'block'
+            });
+        }
+
+        function showOpennedPost(){
+            var postDiv = document.querySelectorAll('.postDiv');
+            postDiv.forEach(element => {
+                element.style.display = 'block'
+            });
+
+            var postsDiv = document.querySelectorAll('.postsDiv');
+            postsDiv.forEach(element => {
+                element.style.display = 'none'
+            });
+        }
+
+    </script>
+
 <%- include("./partials/footer") %>
