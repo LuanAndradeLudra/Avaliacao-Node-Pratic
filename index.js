@@ -1,11 +1,11 @@
-const express = require("express");
-const app = new express();
+const Express = require("express");
+const app = new Express();
 var path = require('path');
 
 //View engine
 app.set("view engine", "ejs");
 //Static Files
-app.use(express.static('public'));
+app.use(Express.static('public'));
 //Routes
 const mainRoutes = require("./routes/mainRoutes");
 app.use(mainRoutes);
